@@ -1,0 +1,83 @@
+{% extends 'navBar.html' %}
+{% block title %}דף הבית{% endblock %}
+{% block content %}
+<style>
+    body {
+        background: radial-gradient(circle at top left, #ffffff 0%, #f0f2f5 100%);
+        margin: 0;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    .home-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+        direction: rtl;
+    }
+
+    .welcome-header {
+        text-align: center;
+        animation: fadeIn 1.2s ease-out;
+    }
+
+    /* עיצוב השם עם דגש עדין */
+    .welcome-header h1 {
+        font-size: clamp(2.5rem, 8vw, 4rem);
+        color: #1a202c;
+        margin: 0;
+        font-weight: 200;
+        letter-spacing: -1px;
+    }
+
+    .welcome-header h1 span {
+        font-weight: 700;
+        color: #2d3748;
+    }
+
+    .welcome-header p {
+        color: #718096;
+        font-size: 1.2rem;
+        margin-top: 15px;
+        letter-spacing: 1px;
+        position: relative;
+        display: inline-block;
+    }
+
+    .welcome-header p::after {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 2px;
+        background: #2d3748;
+        margin: 15px auto 0;
+        opacity: 0.3;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bg-shape {
+        position: absolute;
+        top: 20%;
+        right: 10%;
+        width: 300px;
+        height: 300px;
+        background: rgba(100, 150, 255, 0.03);
+        border-radius: 50%;
+        z-index: -1;
+        filter: blur(50px);
+    }
+</style>
+
+<div class="bg-shape"></div>
+<div class="home-wrapper">
+    <div class="welcome-header">
+        <h1>שלום, <span>{{ user.first_name|default:user.username }}</span></h1>
+        <p>מערכת ניהול המשימות הארגונית שלך</p>
+    </div>
+</div>
+{% endblock %}

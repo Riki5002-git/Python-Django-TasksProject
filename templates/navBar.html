@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ניהול משימות{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nav-bg: #ffffff;
+            --text-main: #111111;
+            --text-muted: #4a5568;
+            --border-color: #dddddd;
+            --accent-color: #000000;
+        }
+
+        body {
+            font-family: 'Assistant', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            color: var(--text-main);
+        }
+
+        nav {
+            background: var(--nav-bg);
+            padding: 0 50px;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            padding: 5px 0;
+        }
+
+        nav a:hover {
+            color: #000;
+            transform: translateY(-1px);
+            text-decoration: underline;
+        }
+
+        .special-link {
+            font-weight: 800 !important;
+            font-size: 1.15rem;
+            border-left: 2px solid var(--border-color);
+            padding-left: 20px;
+            margin-left: 10px;
+        }
+
+        .user-greeting {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            background: #f0f4f8;
+            padding: 6px 15px;
+            border-radius: 6px;
+            margin-left: 20px;
+        }
+
+        .logout-link {
+            color: #e53e3e;
+            font-weight: 700;
+        }
+
+        .logout-link:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: calc(100vh - 75px);
+        }
+
+        .no-team-tag {
+            font-size: 0.85rem;
+            color: #a0aec0;
+            font-weight: 400;
+        }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-links">
+            <a href="{% url 'home' %}" class="special-link">בית</a>
+
+            {% if user.is_authenticated %}
+                {% if user.team and user.role != "מנהל"%}
+                    <a href="{% url 'getTeamsTasks' team=user.team.team_name %}">משימות צוות</a>
+                {% else %}
+                    <span class="no-team-tag">(ללא צוות)</span>
+                {% endif %}
+                {% if user.role == "מנהל" %}
+                    <a href="{% url 'addTask' %}">הוספת משימה</a>
+                    <a href="{% url 'getAllTasks' %}">לוח משימות</a>
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="nav-links">
+            {% if user.is_authenticated %}
+                <span class="user-greeting">{{ user.first_name }} {{ user.last_name }}</span>
+                <a href="{% url 'personalArea' %}">אזור אישי</a>
+                <a href="{% url 'logout' %}" class="logout-link">התנתק</a>
+            {% else %}
+                <a href="{% url 'login' %}">התחברות</a>
+                <a href="{% url 'register' %}" class="special-link">הרשמה למערכת</a>
+            {% endif %}
+        </div>
+    </nav>
+    <div class="content">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+</html>
